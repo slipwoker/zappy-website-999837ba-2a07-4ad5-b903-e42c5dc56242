@@ -1,57 +1,47 @@
-# Nexora AI — Generative Engine Optimization Map
-
-> Nexora AI is a futuristic AI assistant designed specifically for the gaming and content creation community. The brand embodies a confident, smart, and slightly humorous personality that's supportive and energizing. With its sleek dark mode aesthetic featuring neon purple accents and smooth animations, Nexora AI creates an immersive, high-tech experience. The app features dual modes (Creator Mode and Game Mode) and maintains a hype, motivational vibe while helping users level up their gaming skills and content creation journey.
+# Business — Generative Engine Optimization Map
 
 ---
 
 ## Pages
 
 ### Home
-https://nexora-ai-999837ba.zappy5.app
+https://example.com
 Nexora AI is your ultimate AI chatbot application for gamers and creators. Get instant YouTube video ideas, gaming tips, and creative support. Start leveling up today!
 
 ### Modes
-https://nexora-ai-999837ba.zappy5.app/modes
+https://example.com/modes
 Switch between Creator Mode for epic YouTube video ideas and Game Mode for pro-level strategies. Nexora AI adapts to your grind with intelligent dual-mode assistance.
 
 ### Technology
-https://nexora-ai-999837ba.zappy5.app/tech
+https://example.com/tech
 Discover the advanced AI technology behind Nexora&#39;s smart answering questions engine. Sleek dark mode, neon aesthetics, and lightning-fast responses fuel your creativity.
 
 ### Contact
-https://nexora-ai-999837ba.zappy5.app/contact
+https://example.com/contact
 Need help with our AI chatbot application? Get in touch with Nexora AI&#39;s support team. We&#39;re here to answer questions and help you maximize your gaming and content potential.
 
 ## Legal & Policy
 
 ### Privacy Policy
-https://nexora-ai-999837ba.zappy5.app/privacy
+https://example.com/privacy
 Information about how user data is collected, stored, and protected.
 
 ### Terms & Conditions
-https://nexora-ai-999837ba.zappy5.app/terms
+https://example.com/terms
 Legal terms describing service usage, rights, and policies.
 
 ### Accessibility Statement
-https://nexora-ai-999837ba.zappy5.app/accessibility
+https://example.com/accessibility
 Information about WCAG compliance and accessibility features.
 
 ---
 
 # Business Context (for LLM understanding)
 
-## About Nexora AI
-Nexora AI is a futuristic AI assistant designed specifically for the gaming and content creation community. The brand embodies a confident, smart, and slightly humorous personality that's supportive and energizing. With its sleek dark mode aesthetic featuring neon purple accents and smooth animations, Nexora AI creates an immersive, high-tech experience. The app features dual modes (Creator Mode and Game Mode) and maintains a hype, motivational vibe while helping users level up their gaming skills and content creation journey.
-
-## Target Audience
-gamers and content creators
-
-## Industry
-Technology/AI Software
-
+## About Business
 ---
 
 # Additional Resources
 
-- **Sitemap**: https://nexora-ai-999837ba.zappy5.app/sitemap.xml
-- **Robots.txt**: https://nexora-ai-999837ba.zappy5.app/robots.txt
+- **Sitemap**: https://example.com/sitemap.xml
+- **Robots.txt**: https://example.com/robots.txt
