@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>Cutting-Edge AI Technology Powering Your Success — Nexora AI</title>
+    <meta name="description" content="Discover the advanced AI technology behind Nexora&#39;s smart answering questions engine. Sleek dark mode, neon aesthetics, and lightning-fast responses fuel your creativity.">
+    <meta name="keywords" content="AI technology, answering questions, chatbot technology, AI assistant features, machine learning">
+    
+    <!-- Zappy Analytics -->
+<script>
+(function() {
+  'use strict';
+  
+  // Configuration
+  var config = {
+    websiteId: '999837ba-2a07-4ad5-b903-e42c5dc56242',
+    apiUrl: 'https://api.zappy5.com/api/analytics/track',
+    sessionDuration: 30 * 60 * 1000, // 30 minutes
+    visitorDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
+    trackPageViews: true,
+    trackClicks: true,
+    trackFormSubmissions: true
+  };
+  
+  // Generate or retrieve persistent visitor ID (30 days)
+  function getVisitorId() {
+    var visitorKey = 'zappy_visitor_' + config.websiteId;
+    var visitor = null;
+    
+    try {
+      visitor = localStorage.getItem(visitorKey);
+      if (visitor) {
+        var visitorData = JSON.parse(visitor);
+        var now = Date.now();
+        
+        // Check if visitor ID is still valid (30 days)
+        if (now - visitorData.created < config.visitorDuration) {
+          // Update last seen timestamp
+          visitorData.lastSeen = now;
+          localStorage.setItem(visitorKey, JSON.stringify(visitorData));
+          return visitorData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: LocalStorage not available');
+    }
+    
+    // Generate new visitor ID
+    var newVisitorId = 'zv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      localStorage.setItem(visitorKey, JSON.stringify({
+        id: newVisitorId,
+        created: Date.now(),
+        lastSeen: Date.now()
+      }));
+    } catch (e) {
+      // Continue without local storage
+    }
+    
+    return newVisitorId;
+  }
+  
+  // Generate or retrieve session ID (30 minutes)
+  function getSessionId() {
+    var sessionKey = 'zappy_session_' + config.websiteId;
+    var session = null;
+    
+    try {
+      session = sessionStorage.getItem(sessionKey);
+      if (session) {
+        var sessionData = JSON.parse(session);
+        var now = Date.now();
+        
+        // Check if session is still valid
+        if (now - sessionData.timestamp < config.sessionDuration) {
+          // Update timestamp
+          sessionData.timestamp = now;
+          sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          return sessionData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: SessionStorage not available');
+    }
+    
+    // Generate new session ID
+    var newSessionId = 'zs_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      sessionStorage.setItem(sessionKey, JSON.stringify({
+        id: newSessionId,
+        timestamp: Date.now()
+      }));
+    } catch (e) {
+      // Continue without session storage
+    }
+    
+    return newSessionId;
+  }
+  
+  var visitorId = getVisitorId();
+  var sessionId = getSessionId();
+  
+  // Track an event
+  function trackEvent(eventType, data) {
+    data = data || {};
+    
+    var eventData = {
+      website_id: config.websiteId,
+      event_type: eventType,
+      page_path: window.location.pathname,
+      referrer: document.referrer || 'direct',
+      visitor_id: visitorId,
+      session_id: sessionId,
+      metadata: data
+    };
+    
+    // Use sendBeacon if available (better for page unload events)
+    if (navigator.sendBeacon) {
+      var blob = new Blob([JSON.stringify(eventData)], { type: 'application/json' });
+      navigator.sendBeacon(config.apiUrl, blob);
+    } else {
+      // Fallback to fetch
+      fetch(config.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(eventData),
+        keepalive: true
+      }).catch(function(error) {
+        console.warn('Zappy Analytics: Failed to track event', error);
+      });
+    }
+  }
+  
+  // Track page view
+  if (config.trackPageViews) {
+    trackEvent('pageview', {
+      title: document.title,
+      url: window.location.href
+    });
+  }
+  
+  // Track clicks on important elements
+  if (config.trackClicks) {
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      
+      // Track button clicks (counted as actions)
+      if (target.tagName === 'BUTTON' || target.closest('button')) {
+        var button = target.tagName === 'BUTTON' ? target : target.closest('button');
+        trackEvent('click', {
+          element: 'button',
+          text: button.textContent.trim().substring(0, 100),
+          id: button.id || null,
+          class: button.className || null
+        });
+      }
+      
+      // Track link clicks (navigation - not counted as actions)
+      else if (target.tagName === 'A' || target.closest('a')) {
+        var link = target.tagName === 'A' ? target : target.closest('a');
+        trackEvent('navigation', {
+          element: 'link',
+          text: link.textContent.trim().substring(0, 100),
+          href: link.href,
+          external: link.hostname !== window.location.hostname
+        });
+      }
+    }, true);
+  }
+  
+  // Track form submissions
+  if (config.trackFormSubmissions) {
+    document.addEventListener('submit', function(e) {
+      var form = e.target;
+      
+      trackEvent('form_submit', {
+        form_id: form.id || null,
+        form_name: form.name || null,
+        form_action: form.action || null,
+        form_method: form.method || 'GET'
+      });
+    }, true);
+  }
+  
+  // Track time on page (send on page unload)
+  var pageLoadTime = Date.now();
+  
+  window.addEventListener('beforeunload', function() {
+    var timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000); // in seconds
+    
+    trackEvent('page_unload', {
+      time_on_page: timeOnPage,
+      page_path: window.location.pathname
+    });
+  });
+  
+  // Expose tracking function globally for custom events
+  window.zappyAnalytics = {
+    track: trackEvent,
+    getVisitorId: function() { return visitorId; },
+    getSessionId: function() { return sessionId; }
+  };
+  
+})();
+</script>
+<!-- End Zappy Analytics -->
+    <meta property="og:title" content="Cutting-Edge AI Technology Powering Your Success — Nexora AI">
+  <meta property="og:description" content="Discover the advanced AI technology behind Nexora's smart answering questions engine. Sleek dark mode, neon aesthetics, and lightning-fast responses fuel your creativity.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cutting-Edge AI Technology Powering Your Success — Nexora AI">
+  <meta name="twitter:description" content="Discover the advanced AI technology behind Nexora's smart answering questions engine. Sleek dark mode, neon aesthetics, and lightning-fast responses fuel your creativity.">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Cookie Consent -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <!-- Mickidum Accessibility Toolbar -->
+    <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
+    <link rel="stylesheet" href="/styles.css">
+
+    <style id="zappy-dropdown-submenu-styles">
+      /* ========== DESKTOP DROPDOWN SUBMENU STYLES ========== */
+      /* Base styles for dropdown submenus - parent must be positioned */
+      .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { position: relative; }
+      /* Submenu base - hidden by default */
+      .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { display: block !important; position: absolute !important; top: 100%; left: 0; min-width: 220px; background: white; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); padding: 8px 0; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; z-index: 1000; list-style: none; pointer-events: none; }
+      /* CRITICAL: Desktop hover styles to show dropdown */
+      .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Submenu item styling */
+      .sub-menu li { list-style: none; margin: 0; padding: 0; }
+      .sub-menu a { display: block !important; padding: 10px 16px !important; color: #333 !important; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background-color 0.2s; }
+      .sub-menu a:hover { background-color: #f5f5f5; }
+      /* RTL (Hebrew/Arabic) dropdown positioning */
+      [dir="rtl"] .nav-menu .sub-menu, [dir="rtl"] nav .sub-menu, [dir="rtl"] .navbar .sub-menu, html[lang="he"] .nav-menu .sub-menu, html[lang="he"] nav .sub-menu, html[lang="he"] .navbar .sub-menu, html[lang="ar"] .nav-menu .sub-menu, html[lang="ar"] nav .sub-menu, html[lang="ar"] .navbar .sub-menu { left: auto !important; right: 0 !important; }
+      /* Hide empty dropdown menus */
+      .sub-menu:empty, .sub-menu:not(:has(li:not(.zappy-hidden-menu-item))), .sub-menu:not(:has(li)) { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+      /* Desktop: show submenu on Menu Group hover */
+      li:has(.menu-group-title):hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Menu Group title styling */
+      .nav-menu > li > .menu-group-title, #navMenu > li > .menu-group-title { display: inline-block; padding: 0.5rem 1rem; cursor: default; user-select: none; }
+      
+      /* ========== MOBILE SUBMENU STYLES ========== */
+      @media (max-width: 768px) {
+        .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { position: static !important; transform: none !important; box-shadow: none !important; background: transparent !important; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; padding: 0 !important; border-radius: 0 !important; }
+        .sub-menu.mobile-expanded { max-height: 500px !important; opacity: 1 !important; visibility: visible !important; padding: 8px 0 8px 16px !important; }
+        [dir="rtl"] .sub-menu.mobile-expanded, html[lang="he"] .sub-menu.mobile-expanded { padding: 8px 16px 8px 0 !important; }
+        /* Disable hover behavior on mobile */
+        .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 0; visibility: hidden; pointer-events: none; }
+        .nav-menu li > .sub-menu.mobile-expanded, nav li > .sub-menu.mobile-expanded, .navbar li > .sub-menu.mobile-expanded, #navMenu li > .sub-menu.mobile-expanded { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+        .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { display: flex !important; flex-wrap: wrap !important; align-items: center !important; position: relative !important; min-height: 44px !important; }
+        .nav-menu li:has(.sub-menu) > a, nav li:has(.sub-menu) > a, .navbar li:has(.sub-menu) > a, #navMenu li:has(.sub-menu) > a { flex: 1 !important; min-width: 0 !important; }
+        .nav-menu li:has(.sub-menu) > .menu-group-title, nav li:has(.sub-menu) > .menu-group-title, .navbar li:has(.sub-menu) > .menu-group-title, #navMenu li:has(.sub-menu) > .menu-group-title { flex: 1 !important; min-width: 0 !important; padding: 0 !important; line-height: inherit !important; }
+        .nav-menu li:has(.sub-menu) > .sub-menu, nav li:has(.sub-menu) > .sub-menu, .navbar li:has(.sub-menu) > .sub-menu, #navMenu li:has(.sub-menu) > .sub-menu { flex-basis: 100% !important; width: 100% !important; }
+        .nav-menu li:has(.sub-menu) > a [class*="chevron"], .nav-menu li:has(.sub-menu) > a [class*="arrow"], .nav-menu li:has(.sub-menu) > a .fa-chevron-down, .nav-menu li:has(.sub-menu) > a .fa-angle-down, nav li:has(.sub-menu) > a [class*="chevron"], nav li:has(.sub-menu) > a [class*="arrow"], #navMenu li:has(.sub-menu) > a [class*="chevron"], #navMenu li:has(.sub-menu) > a [class*="arrow"] { display: none !important; visibility: hidden !important; }
+        .mobile-submenu-toggle { display: flex !important; align-items: center !important; justify-content: center !important; width: 44px !important; height: auto !important; background: transparent !important; border: none !important; cursor: pointer !important; color: var(--text-dark) !important; position: static !important; flex-shrink: 0 !important; align-self: stretch !important; z-index: 2 !important; padding: 0 !important; margin: 0 !important; }
+        .mobile-submenu-toggle::after { content: '' !important; width: 0 !important; height: 0 !important; border-left: 6px solid transparent !important; border-right: 6px solid transparent !important; border-top: 7px solid currentColor !important; transition: transform 0.3s ease !important; }
+        .mobile-submenu-toggle.expanded::after { transform: rotate(180deg) !important; }
+        .sub-menu a { padding: 10px 0 !important; display: block !important; color: var(--text-dark) !important; }
+        .navbar .sub-menu li a, nav.navbar .sub-menu li a, .zappy-products-dropdown .sub-menu a { color: var(--text-dark) !important; }
+      }
+      @media (min-width: 769px) { .mobile-submenu-toggle { display: none !important; } }
+    </style>
+
+    <style id="zappy-widget-visibility">
+      #mic-access-tool-general-button, .mic-access-tool-general-button,
+      #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+      ._access-icon, #mic-access-tool-box, .mic-access-tool-box,
+      #mic-init-access-tool #mic-access-tool-box, div[id*="mic-access-tool-box"], ._access-menu {
+        display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important;
+      }
+    </style>
+</head>
+<body>
+
+  <nav class="navbar">
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+    <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+    <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display:none;">
+      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+  </button>
+  
+  <button class="phone-header-btn" aria-label="Call">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+    </svg>
+  </button>
+  
+  <div class="nav-container">
+    <div class="nav-brand">
+      <a href="/" class="logo-link">
+        <img src="/assets/business-logo.webp" alt="Nexora AI" class="logo" />
+      </a>
+    </div>
+    
+    <ul class="nav-menu" id="navMenu"><li><a href="/modes">Modes</a></li><li><a href="/tech">Technology</a></li></ul>
+    
+    <div class="nav-cta-container">
+      <a href="/contact" class="nav-cta-btn">Contact</a>
+    </div>
+  </div>
+</nav>
+  
+  <main>
+    <section class="technology-banner-section" data-layout-spec="Technology-banner">
+  <div class="technology-banner-container">
+    <div class="technology-banner-content">
+      <h1>Tech that feels like a co-pilot.</h1>
+      <h3>Fast, focused, and built for creators and players.</h3>
+      <p>Experience unparalleled responsiveness and clarity with an interface designed for high-intensity sessions. Our AI chatbot application adapts to your workflow, whether you're generating YouTube video ideas or answering questions in real-time. Every interaction is optimized for speed and precision, empowering you to stay in the zone.</p>
+    </div>
+    <div class="technology-banner-image-wrapper">
+      <img data-placeholder="technology-banner-image-1" data-context="Abstract AI circuitry visualization with glowing neon purple and cyan circuit pathways forming an intricate network pattern, featuring a luminous minimal orb at the center representing AI intelligence, dark background with subtle technological depth, futuristic HUD aesthetic for gaming and content creation AI assistant" width="600" height="400" src="/assets/site-technology-banner-image-1.webp" alt="AI circuitry visualization with glowing orb">
+    </div>
+  </div>
+  <div class="technology-banner-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="technology-banner-neon-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#B026FF;stop-"></stop>
+          <stop offset="48%" style="stop-color:#B026FF;stop-opacity:1"></stop>
+          <stop offset="52%" style="stop-color:#B026FF;stop-opacity:1"></stop>
+          <stop offset="100%" style="stop-color:#B026FF;stop-"></stop>
+        </linearGradient>
+        <linearGradient id="technology-banner-cyan-pulse" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#00D4FF;stop-"></stop>
+          <stop offset="50%" style="stop-color:#00D4FF;stop-opacity:0.8"></stop>
+          <stop offset="100%" style="stop-color:#00D4FF;stop-"></stop>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="1200" height="1" fill="url(#technology-banner-neon-gradient)"></rect>
+      <circle cx="200" cy="0.5" r="2" fill="#00D4FF" opacity="0.9"></circle>
+      <circle cx="350" cy="0.5" r="2" fill="#00D4FF" opacity="0.7"></circle>
+      <circle cx="500" cy="0.5" r="2" fill="#00D4FF" opacity="0.85"></circle>
+      <circle cx="650" cy="0.5" r="2" fill="#00D4FF" opacity="0.75"></circle>
+      <circle cx="800" cy="0.5" r="2" fill="#00D4FF" opacity="0.8"></circle>
+      <circle cx="950" cy="0.5" r="2" fill="#00D4FF" opacity="0.65"></circle>
+      <path d="M0,40 L0,2 L1200,2 L1200,40 Z" fill="var(--bg-light)"></path>
+    </svg>
+  </div>
+</section>
+
+<section class="technology-architecture-section" data-layout-spec="Technology-architecture">
+  <div class="architecture-container">
+    <div class="architecture-header">
+      <h2>How Nexora AI thinks (at a high level)</h2>
+      <p>Our AI chatbot application processes your gaming and content creation needs through a sophisticated multi-layer architecture designed for speed, clarity, and actionable guidance.</p>
+    </div>
+    
+    <div class="architecture-diagram">
+      <!-- SVG Connectors -->
+      <svg class="diagram-connectors" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 800" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Input to Mode Layer -->
+        <path d="M200,150 L200,280" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.4"></path>
+        <path d="M400,150 L400,280" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.4"></path>
+        <path d="M600,150 L600,280" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.4"></path>
+        
+        <!-- Mode Layer to Guidance Engine -->
+        <path d="M300,380 L300,480" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.4"></path>
+        <path d="M500,380 L500,480" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.4"></path>
+        
+        <!-- Guidance to Safety -->
+        <path d="M400,580 L700,580" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.4"></path>
+        
+        <!-- Safety to Outputs -->
+        <path d="M900,580 L600,680" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.4"></path>
+        <path d="M900,580 L900,680" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.4"></path>
+      </svg>
+      
+      <!-- Layer 1: Inputs -->
+      <div class="diagram-layer layer-inputs">
+        <div class="diagram-block" data-block="goals">
+          <div class="block-icon">
+            <svg data-element-type="icon" data-icon-type="svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <h3>Goals</h3>
+          <p>User objectives, video ideas, and content targets</p>
+        </div>
+        
+        <div class="diagram-block" data-block="style">
+          <div class="block-icon">
+            <svg data-element-type="icon" data-icon-type="svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="currentColor"></path>
+              <path d="M12 6C8.69 6 6 8.69 6 12C6 15.31 8.69 18 12 18C15.31 18 18 15.31 18 12C18 8.69 15.31 6 12 6Z" fill="currentColor" opacity="0.5"></path>
+            </svg>
+          </div>
+          <h3>Style</h3>
+          <p>Tone preferences, brand voice, and creative direction</p>
+        </div>
+        
+        <div class="diagram-block" data-block="context">
+          <div class="block-icon">
+            <svg data-element-type="icon" data-icon-type="svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 13H11V3H3V13ZM3 21H11V15H3V21ZM13 21H21V11H13V21ZM13 3V9H21V3H13Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <h3>Context</h3>
+          <p>Game data, audience insights, and session history</p>
+        </div>
+      </div>
+      
+      <!-- Layer 2: Mode Layer -->
+      <div class="diagram-layer layer-mode">
+        <div class="diagram-block mode-block" data-block="creator">
+          <div class="block-icon">
+            <svg data-element-type="icon" data-icon-type="svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M23 7L16 12L23 17V7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              <rect x="1" y="5" width="15" height="14" rx="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></rect>
+            </svg>
+          </div>
+          <h3>Creator Mode</h3>
+          <p>YouTube video ideas, scripts, and content planning workflows</p>
+        </div>
+        
+        <div class="diagram-block mode-block" data-block="game">
+          <div class="block-icon">
+            <svg data-element-type="icon" data-icon-type="svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 11.5C6 10.12 7.12 9 8.5 9C9.88 9 11 10.12 11 11.5C11 12.88 9.88 14 8.5 14C7.12 14 6 12.88 6 11.5Z" fill="currentColor"></path>
+              <path d="M17.5 10H15.5V8H14V10H12V11.5H14V13.5H15.5V11.5H17.5V10Z" fill="currentColor"></path>
+              <path d="M18 2H6C3.79 2 2 3.79 2 6V13C2 15.21 3.79 17 6 17H8L10 21L12 17H18C20.21 17 22 15.21 22 13V6C22 3.79 20.21 2 18 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <h3>Game Mode</h3>
+          <p>Strategy guides, skill-building tips, and real-time coaching</p>
+        </div>
+      </div>
+      
+      <!-- Layer 3: Guidance Engine -->
+      <div class="diagram-layer layer-guidance">
+        <div class="diagram-block wide-block" data-block="engine">
+          <div class="block-icon">
+            <svg data-element-type="icon" data-icon-type="svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <h3>Guidance Engine</h3>
+          <p>Structures responses with checklists, frameworks, and actionable callouts—answering questions with clarity and energy</p>
+        </div>
+      </div>
+      
+      <!-- Layer 4: Safety & Tone -->
+      <div class="diagram-layer layer-safety">
+        <div class="diagram-block wide-block" data-block="safety">
+          <div class="block-icon">
+            <svg data-element-type="icon" data-icon-type="svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <h3>Safety &amp; Tone</h3>
+          <p>Ensures supportive humor, positive vibes, and clear communication—keeping the hype high and the guidance safe</p>
+        </div>
+      </div>
+      
+      <!-- Layer 5: Outputs -->
+      <div class="diagram-layer layer-outputs">
+        <div class="diagram-block" data-block="scripts">
+          <div class="block-icon">
+            <svg data-element-type="icon" data-icon-type="svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M8 13H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+              <path d="M8 17H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+            </svg>
+          </div>
+          <h3>Scripts</h3>
+          <p>Ready-to-use video scripts and content outlines</p>
+        </div>
+        
+        <div class="diagram-block" data-block="plans">
+          <div class="block-icon">
+            <svg data-element-type="icon" data-icon-type="svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></rect>
+              <path d="M8 3V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M3 8H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M3 16H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <h3>Plans</h3>
+          <p>Strategic roadmaps and step-by-step action plans</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Bottom Divider -->
+  <div class="architecture-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="glow-filter">
+          <feGaussianBlur stdDeviation="2" result="coloredBlur"></feGaussianBlur>
+          <feMerge>
+            <feMergeNode in="coloredBlur"></feMergeNode>
+            <feMergeNode in="SourceGraphic"></feMergeNode>
+          </feMerge>
+        </filter>
+      </defs>
+      <path d="M0,60 L0,30 L100,30 L110,25 L120,30 L300,30 L310,25 L320,30 L500,30 L510,25 L520,30 L700,30 L710,25 L720,30 L900,30 L910,25 L920,30 L1100,30 L1110,25 L1120,30 L1200,30 L1200,60 Z" fill="var(--bg-light)" stroke="rgba(161,0,242,0.45)" stroke-width="1" filter="url(#glow-filter)"></path>
+    </svg>
+  </div>
+</section>
+
+<section class="technology-integrations-section" data-layout-spec="Technology-integrations">
+  <div class="integrations-container">
+    <div class="integrations-header">
+      <h2>Fits your stack</h2>
+      <p>Nexora AI complements your existing tools without replacing them. Seamlessly integrate with your favorite platforms to enhance your workflow, whether you're streaming, editing, or connecting with your community.</p>
+    </div>
+    <div class="integrations-grid">
+      <div class="integration-card">
+        <div class="card-icon-wrapper">
+          <svg data-element-type="icon" data-icon-type="svg" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 4L4 10V22L16 28L28 22V10L16 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M16 16L4 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M16 16V28" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M16 16L28 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+        <h3>Streaming Workflow</h3>
+        <p>Connect with your broadcasting software to get real-time AI assistance while you're live. Nexora AI analyzes chat sentiment, suggests content pivots, and helps you stay energized during marathon streams.</p>
+      </div>
+      <div class="integration-card">
+        <div class="card-icon-wrapper">
+          <svg data-element-type="icon" data-icon-type="svg" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="6" width="24" height="20" rx="2" stroke="currentColor" stroke-width="2"></rect>
+            <path d="M4 12H28" stroke="currentColor" stroke-width="2"></path>
+            <path d="M12 18L16 21L20 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+        <h3>Editing Workflow</h3>
+        <p>Integrate with your video editing suite to receive AI-powered suggestions for cuts, transitions, and pacing. Nexora AI helps you identify highlight moments and optimize content for maximum engagement.</p>
+      </div>
+      <div class="integration-card">
+        <div class="card-icon-wrapper">
+          <svg data-element-type="icon" data-icon-type="svg" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M28 16C28 22.6274 22.6274 28 16 28C9.37258 28 4 22.6274 4 16C4 9.37258 9.37258 4 16 4C22.6274 4 28 9.37258 28 16Z" stroke="currentColor" stroke-width="2"></path>
+            <path d="M12 11L12 21L20 16L12 11Z" fill="currentColor"></path>
+          </svg>
+        </div>
+        <h3>Chat &amp; Community</h3>
+        <p>Sync with your Discord, Slack, or community platforms. Nexora AI monitors conversations, surfaces trending topics, and helps you engage with your audience more effectively across all channels.</p>
+      </div>
+      <div class="integration-card">
+        <div class="card-icon-wrapper">
+          <svg data-element-type="icon" data-icon-type="svg" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 6H24C25.1046 6 26 6.89543 26 8V24C26 25.1046 25.1046 26 24 26H8C6.89543 26 6 25.1046 6 24V8C6 6.89543 6.89543 6 8 6Z" stroke="currentColor" stroke-width="2"></path>
+            <path d="M10 12H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+            <path d="M10 16H18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+            <path d="M10 20H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+          </svg>
+        </div>
+        <h3>Game Notes</h3>
+        <p>Link with your note-taking apps to automatically capture strategy insights, build orders, and gameplay observations. Nexora AI organizes your notes and surfaces relevant tips when you need them most.</p>
+      </div>
+      <div class="integration-card">
+        <div class="card-icon-wrapper">
+          <svg data-element-type="icon" data-icon-type="svg" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 4L20 12L28 13.5L22 19.5L23.5 28L16 24L8.5 28L10 19.5L4 13.5L12 12L16 4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+        <h3>Highlight Review</h3>
+        <p>Connect with clip management tools to let Nexora AI analyze your best moments. Get instant feedback on what makes clips viral-worthy and suggestions for improving your highlight reel content.</p>
+      </div>
+      <div class="integration-card">
+        <div class="card-icon-wrapper">
+          <svg data-element-type="icon" data-icon-type="svg" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="10" stroke="currentColor" stroke-width="2"></circle>
+            <path d="M16 8V16L20 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+        <h3>Routine Planning</h3>
+        <p>Integrate with calendar and scheduling apps to optimize your content creation routine. Nexora AI suggests ideal streaming times, content themes, and helps you maintain consistency without burning out.</p>
+      </div>
+    </div>
+  </div>
+  <div class="integrations-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="integrations-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:rgba(161,0,242,0.12);stop-opacity:1"></stop>
+          <stop offset="50%" style="stop-color:rgba(0,200,255,0.08);stop-opacity:1"></stop>
+          <stop offset="100%" style="stop-color:rgba(161,0,242,0.12);stop-opacity:1"></stop>
+        </linearGradient>
+      </defs>
+      <path d="M0,60 L0,30 Q200,28 400,32 T800,28 Q1000,32 1200,30 L1200,60 Z" fill="var(--bg-light)"></path>
+      <path d="M0,60 L0,45 Q300,42 600,46 T1200,42 L1200,60 Z" fill="var(--bg-light)"></path>
+    </svg>
+  </div>
+</section>
+
+<section class="technology-faq-section" data-layout-spec="Technology-faq">
+  <div class="technology-faq-container">
+    <h2 class="technology-faq-title">Questions, answered.</h2>
+    
+    <div class="technology-faq-layout">
+      <div class="technology-faq-questions">
+        <div class="technology-faq-item">
+          <h3 class="technology-faq-question">What changes when I switch between Creator Mode and Game Mode?</h3>
+          <p class="technology-faq-answer">Creator Mode focuses on content strategy, video ideas, and workflow optimization. Game Mode shifts to in-game coaching, strategy breakdowns, and performance tips. The AI chatbot application adapts its tone and suggestions based on your active mode.</p>
+        </div>
+        
+        <div class="technology-faq-item">
+          <h3 class="technology-faq-question">How do I get the best results from Nexora AI?</h3>
+          <p class="technology-faq-answer">Be specific with your questions. Instead of "help with content," try "YouTube video ideas for a battle royale montage." The more context you provide about your goals and style, the more tailored the AI's responses become.</p>
+        </div>
+        
+        <div class="technology-faq-item">
+          <h3 class="technology-faq-question">Can I customize Nexora's tone and personality?</h3>
+          <p class="technology-faq-answer">Absolutely. Adjust the hype level, formality, and humor settings in your profile. Whether you want motivational coach vibes or straight technical advice, Nexora adapts to match your energy.</p>
+        </div>
+        
+        <div class="technology-faq-item">
+          <h3 class="technology-faq-question">What are the limitations of gaming advice?</h3>
+          <p class="technology-faq-answer">Nexora provides strategic guidance and skill-building tips, but can't replace hands-on practice. It won't give you instant pro-level aim, but it will help you understand positioning, timing, and decision-making to level up faster.</p>
+        </div>
+        
+        <div class="technology-faq-item">
+          <h3 class="technology-faq-question">How does Nexora help with creator workflows?</h3>
+          <p class="technology-faq-answer">From brainstorming video concepts to scripting hooks and optimizing upload schedules, Nexora streamlines your creative process. It's like having a production assistant who never sleeps and always has fresh ideas.</p>
+        </div>
+        
+        <div class="technology-faq-item">
+          <h3 class="technology-faq-question">What about privacy and data security?</h3>
+          <p class="technology-faq-answer">Your conversations stay private. We use industry-standard encryption and never sell your data. You control what information you share, and you can delete your chat history anytime from settings.</p>
+        </div>
+      </div>
+      
+      <div class="technology-faq-support">
+        <div class="technology-faq-support-card">
+          <h3 class="technology-faq-support-title">Focus over noise.</h3>
+          <p class="technology-faq-support-text">Nexora AI cuts through the chaos with clarity and consistency. Whether you're answering questions about your next gameplay strategy or mapping out your content calendar, our supportive coaching keeps you locked in on what matters—leveling up your skills and building your brand without the distractions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="technology-faq-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,60 L0,30 Q150,25 300,32 T600,28 Q750,32 900,28 T1200,32 L1200,60 Z" fill="var(--bg-light)"></path>
+    </svg>
+  </div>
+</section>
+
+<section class="technology-cta-section" data-layout-spec="Technology-cta">
+  <div class="technology-cta-container">
+    <div class="technology-cta-content">
+      <h2 class="technology-cta-title">Want a recommended setup path?</h2>
+      <p class="technology-cta-description">Invite users to share their game, content format, and weekly schedule to get a tailored starting plan.</p>
+      <a href="/contact" class="technology-cta-button">
+        <span class="technology-cta-button-text">Message Nexora AI</span>
+        <svg class="technology-cta-button-icon" data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </a>
+    </div>
+    <div class="technology-cta-glow-orb technology-cta-glow-orb-1"></div>
+    <div class="technology-cta-glow-orb technology-cta-glow-orb-2"></div>
+  </div>
+</section>
+  </main>
+  
+  <footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-top">
+      <div class="footer-column footer-about">
+        <img src="/assets/business-logo.webp" alt="Nexora AI" class="logo" />
+        <p class="footer-tagline">Empowering the future with intelligent AI solutions.</p>
+      </div>
+      
+      <div class="footer-column footer-links">
+        <h3 class="footer-heading">Quick Links</h3>
+        <ul class="footer-nav">
+          <li><a href="/modes">Modes</a></li>
+          <li><a href="/tech">Technology</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column footer-contact">
+        <h3 class="footer-heading">Contact Us</h3>
+        <ul class="footer-contact-list">
+          <li>
+            <i class="fas fa-envelope"></i>
+            <a href="mailto:[business_email]">[business_email]</a>
+          </li>
+          <li>
+            <i class="fas fa-phone"></i>
+            <a href="tel:[business_phone]">[business_phone]</a>
+          </li>
+          <li><a href="/"><i class="fas fa-map-marker-alt"></i>
+            <span>[business_address]</span></a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column footer-social">
+        <h3 class="footer-heading">Connect With Us</h3>
+        <div class="social-links">
+          <a href="[facebook_handle]" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="[instagram_handle]" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="[whatsapp_handle]" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">
+        <p class="copyright">© 2026 Nexora AI. All rights reserved.</p>
+      </div>
+      <div class="footer-bottom-right">
+        <nav class="footer-legal">
+          <a href="/privacy">Privacy Policy</a>
+          <span class="separator">•</span>
+          <a href="/terms">Terms &amp; Conditions</a>
+          <span class="separator">•</span>
+          <a href="/accessibility">Accessibility</a>
+        </nav>
+        <a href="https://zappy5.com" target="_blank" class="zappy-attribution">Generated by Zappy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+  
+  <a href="https://wa.me/[whatsapp_handle]" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+  
+  <div data-integration="accessibility:toolbar"></div>
+
+    <script src="/script.js"></script>
+
+    <script id="zappy-mobile-submenu-script">
+    (function() {
+      function initMobileSubmenuToggles() {
+        if (window.innerWidth > 768) {
+          document.querySelectorAll('.mobile-submenu-toggle').forEach(function(btn) { btn.remove(); });
+          document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) { menu.classList.remove('mobile-expanded'); });
+          return;
+        }
+        var items = document.querySelectorAll('.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)');
+        items.forEach(function(li) {
+          if (li.querySelector('.mobile-submenu-toggle')) return;
+          var submenu = li.querySelector('.sub-menu');
+          var parentLink = li.querySelector(':scope > a');
+          if (!submenu || !parentLink) return;
+          var toggleBtn = document.createElement('button');
+          toggleBtn.className = 'mobile-submenu-toggle';
+          toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+          toggleBtn.setAttribute('type', 'button');
+          parentLink.insertAdjacentElement('afterend', toggleBtn);
+          toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+              if (menu !== submenu) { menu.classList.remove('mobile-expanded'); var t = menu.parentElement.querySelector('.mobile-submenu-toggle'); if(t) t.classList.remove('expanded'); }
+            });
+            submenu.classList.toggle('mobile-expanded');
+            toggleBtn.classList.toggle('expanded');
+          });
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileSubmenuToggles); }
+      else { initMobileSubmenuToggles(); }
+      var resizeTimer; window.addEventListener('resize', function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(initMobileSubmenuToggles, 250); });
+      // Re-initialize when mobile menu becomes visible (MutationObserver)
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes') {
+            var target = mutation.target;
+            if (target.classList && (target.classList.contains('active') || target.classList.contains('open'))) {
+              setTimeout(initMobileSubmenuToggles, 100);
+            }
+          }
+        });
+      });
+      setTimeout(function() {
+        document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu, nav').forEach(function(menu) {
+          observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+        });
+      }, 500);
+    })();
+    </script>
+
+    <script id="zappy-navbar-scroll-effect">
+    (function(){var nb=document.querySelector('nav.navbar,.navbar:not(.zappy-catalog-menu)');var cm=document.querySelector('.zappy-catalog-menu');if(!nb)return;var fb='rgba(14,15,20,0.85)';var th=60;nb.style.transition='background 0.3s ease,backdrop-filter 0.3s ease,-webkit-backdrop-filter 0.3s ease,box-shadow 0.3s ease';if(cm)cm.style.transition='background 0.3s ease,backdrop-filter 0.3s ease,-webkit-backdrop-filter 0.3s ease';function onS(){var y=window.scrollY||window.pageYOffset;if(y>th){nb.style.background=fb;nb.style.backdropFilter='blur(12px)';nb.style.webkitBackdropFilter='blur(12px)';nb.style.boxShadow='0 2px 16px rgba(0,0,0,0.12)';if(cm){cm.style.background=fb;cm.style.backdropFilter='blur(12px)';cm.style.webkitBackdropFilter='blur(12px)';}}else{nb.style.background='transparent';nb.style.backdropFilter='none';nb.style.webkitBackdropFilter='none';nb.style.boxShadow='none';if(cm){cm.style.background='transparent';cm.style.backdropFilter='none';cm.style.webkitBackdropFilter='none';}}}window.addEventListener('scroll',onS,{passive:true});onS();})();
+    </script>
+</body>
+</html>
